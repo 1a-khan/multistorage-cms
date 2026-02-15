@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h3 m-0">{{ document.title }}</h1>
+    <p class="text-muted mb-0">Hub: <a href="{% url 'project_hubs:detail' hub.slug %}">{{ hub.name }}</a></p>
+  </div>
+  <a class="btn btn-outline-primary" href="{% url 'documents:list' hub.slug %}">Back to List</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <p><strong>Description:</strong> {{ document.description|default:'-' }}</p>
+        <p><strong>MIME:</strong> {{ document.mime_type }}</p>
+        <p><strong>Size:</strong> {{ document.size_bytes }} bytes</p>
+        <p><strong>Checksum (sha256):</strong> <code>{{ document.checksum_sha256 }}</code></p>
+        <p class="mb-0"><strong>Visibility:</strong> {{ document.visibility }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div id="upload-status"
+         hx-get="{% url 'documents:status' hub.slug document.pk %}"
+         {% if should_poll_status %}
+         hx-trigger="load, every 4s"
+         {% else %}
+         hx-trigger="load"
+         {% endif %}
+         hx-swap="innerHTML">
+      {% include 'documents/partials/upload_status.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}

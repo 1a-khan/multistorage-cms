@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 m-0">Project Hubs</h1>
+  <a class="btn btn-primary" href="{% url 'project_hubs:create' %}">Create Hub</a>
+</div>
+
+<div class="row g-3">
+  {% for hub in hubs %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="h5"><a href="{% url 'project_hubs:detail' hub.slug %}" class="text-decoration-none">{{ hub.name }}</a></h2>
+          <p class="text-muted small mb-2">Owner: {{ hub.owner.email }}</p>
+          <p class="mb-0">{{ hub.description|default:'No description yet.' }}</p>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info">No project hubs found. Create one to get started.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

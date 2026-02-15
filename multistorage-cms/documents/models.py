@@ -62,6 +62,8 @@ class DocumentVersion(models.Model):
     )
     storage_key = models.CharField(max_length=512)
     upload_state = models.CharField(max_length=20, choices=UploadState.choices, default=UploadState.PENDING)
+    uploaded_at = models.DateTimeField(null=True, blank=True)
+    error_message = models.TextField(blank=True)
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,

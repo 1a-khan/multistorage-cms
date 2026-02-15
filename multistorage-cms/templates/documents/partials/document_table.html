@@ -1,0 +1,28 @@
+<div class="card" id="document-list-container">
+  <div class="table-responsive">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Owner</th>
+          <th>Version</th>
+          <th>Visibility</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for document in documents %}
+          <tr>
+            <td><a href="{% url 'documents:detail' hub.slug document.pk %}">{{ document.title }}</a></td>
+            <td>{{ document.owner.email }}</td>
+            <td>{% if document.current_version %}v{{ document.current_version.version_number }}{% else %}-{% endif %}</td>
+            <td>{{ document.visibility }}</td>
+            <td>{{ document.created_at }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="text-muted">No accessible documents in this hub.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
