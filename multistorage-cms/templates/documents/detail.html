@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h3 m-0">{{ document.title }}</h1>
+    <p class="text-muted mb-0">Hub: <a href="{% url 'project_hubs:detail' hub.slug %}">{{ hub.name }}</a></p>
+  </div>
+  <div class="d-flex gap-2">
+    {% if can_open_file %}
+      <a class="btn btn-primary" href="{% url 'documents:open' hub.slug document.pk %}" target="_blank" rel="noreferrer">Open File</a>
+    {% else %}
+      <button class="btn btn-primary" type="button" disabled>Open File</button>
+    {% endif %}
+    <a class="btn btn-outline-dark" href="{% url 'documents:file_info' hub.slug document.pk %}" target="_blank" rel="noreferrer">File API</a>
+    {% if can_manage_document %}
+      <a class="btn btn-outline-secondary" href="{% url 'documents:edit' hub.slug document.pk %}">Edit</a>
+    {% endif %}
+    {% if can_delete_document %}
+      <a class="btn btn-outline-danger" href="{% url 'documents:delete' hub.slug document.pk %}">Delete</a>
+    {% endif %}
+    <a class="btn btn-outline-primary" href="{% url 'documents:list' hub.slug %}">Back to List</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <p><strong>Description:</strong> {{ document.description|default:'-' }}</p>
+        <p><strong>MIME:</strong> {{ document.mime_type }}</p>
+        <p><strong>Size:</strong> {{ document.size_bytes }} bytes</p>
+        <p><strong>Checksum (sha256):</strong> <code>{{ document.checksum_sha256 }}</code></p>
+        <p class="mb-0"><strong>Visibility:</strong> {{ document.visibility }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div id="upload-status"
+         hx-get="{% url 'documents:status' hub.slug document.pk %}"
+         {% if should_poll_status %}
+         hx-trigger="load, every 4s"
+         {% else %}
+         hx-trigger="load"
+         {% endif %}
+         hx-swap="innerHTML">
+      {% include 'documents/partials/upload_status.html' %}
+    </div>
+  </div>
+</div>
+{% endblock %}

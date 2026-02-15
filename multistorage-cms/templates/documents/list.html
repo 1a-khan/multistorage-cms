@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h3 m-0">Documents</h1>
+    <p class="text-muted mb-0">Hub: <a href="{% url 'project_hubs:detail' hub.slug %}">{{ hub.name }}</a></p>
+  </div>
+  <a class="btn btn-primary" href="{% url 'documents:upload' hub.slug %}">Upload Document</a>
+</div>
+
+<form class="card card-body mb-3"
+      hx-get="{% url 'documents:list' hub.slug %}"
+      hx-target="#document-list"
+      hx-swap="innerHTML"
+      hx-push-url="true">
+  <div class="row g-2">
+    <div class="col-md-6">
+      <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Search title or description">
+    </div>
+    <div class="col-md-4">
+      <select name="visibility" class="form-select">
+        <option value="">All visibility</option>
+        {% for value, label in visibility_choices %}
+          <option value="{{ value }}" {% if visibility == value %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2 d-grid">
+      <button type="submit" class="btn btn-outline-primary">Filter</button>
+    </div>
+  </div>
+</form>
+
+<div id="document-list">
+  {% include 'documents/partials/document_table.html' %}
+</div>
+{% endblock %}
