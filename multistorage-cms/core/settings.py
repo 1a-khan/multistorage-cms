@@ -48,6 +48,14 @@ if ENABLE_ALLAUTH:
         'allauth.socialaccount.providers.google',
     ]
 
+DRF_AVAILABLE = importlib.util.find_spec('rest_framework') is not None
+ENABLE_API = os.getenv('ENABLE_API', '1') == '1' and DRF_AVAILABLE
+if ENABLE_API:
+    INSTALLED_APPS += [
+        'rest_framework',
+        'rest_framework.authtoken',
+    ]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -180,3 +188,12 @@ CELERY_TASK_ALWAYS_EAGER = os.getenv('CELERY_TASK_ALWAYS_EAGER', '0') == '1'
 CELERY_TASK_EAGER_PROPAGATES = True
 
 FLOWER_URL = os.getenv('FLOWER_URL', 'http://127.0.0.1:5555')
+
+if ENABLE_API:
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework.authentication.SessionAuthentication',
+            'rest_framework.authentication.TokenAuthentication',
+        ],
+        'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
+    }

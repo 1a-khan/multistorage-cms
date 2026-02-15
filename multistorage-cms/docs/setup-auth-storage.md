@@ -104,8 +104,10 @@ Use a service account (recommended for server-to-server uploads).
 1. Enable Google Drive API.
 2. Create service account.
 3. Create and download service account JSON.
-4. Share target Drive folder with service account email.
-5. Copy folder id from Drive URL.
+4. Prefer a Shared Drive folder (service accounts do not have personal Drive quota).
+5. Add service account as member of that Shared Drive (Content manager or above).
+6. Share target folder with service account email if needed.
+7. Copy folder id from Drive URL.
 
 ### StorageBackend JSON
 Create backend with:

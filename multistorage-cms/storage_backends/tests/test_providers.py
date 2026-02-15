@@ -138,5 +138,11 @@ class CloudProviderTests(TestCase):
                     result = provider.upload(source, 'hub/doc.txt')
 
                 self.assertEqual(result, 'gdrive://file-id-1:doc.txt')
+                fake_drive_files.create.assert_called_once_with(
+                    body={'name': 'doc.txt', 'parents': ['folder123']},
+                    media_body=fake_http_module.MediaFileUpload.return_value,
+                    fields='id,name',
+                    supportsAllDrives=True,
+                )
             finally:
                 source.unlink(missing_ok=True)

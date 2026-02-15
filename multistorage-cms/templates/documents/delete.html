@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h1 class="h3 mb-3 text-danger">Delete Document</h1>
+    <div class="card card-body">
+      <p>You are about to delete <strong>{{ document.title }}</strong>.</p>
+      <p class="mb-0">This will remove metadata and versions from the app database.</p>
+      <form method="post" class="mt-3 d-flex gap-2">
+        {% csrf_token %}
+        <button class="btn btn-danger" type="submit">Delete</button>
+        <a class="btn btn-outline-secondary" href="{% url 'documents:detail' hub.slug document.pk %}">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

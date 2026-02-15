@@ -110,7 +110,12 @@ class GoogleDriveStorageProvider(StorageProvider):
         file_name = Path(storage_key).name
         metadata = {'name': file_name, 'parents': [folder_id]}
         media = MediaFileUpload(str(local_path), resumable=True)
-        created = drive.files().create(body=metadata, media_body=media, fields='id,name').execute()
+        created = drive.files().create(
+            body=metadata,
+            media_body=media,
+            fields='id,name',
+            supportsAllDrives=True,
+        ).execute()
         return f'gdrive://{created["id"]}:{created["name"]}'
 
 

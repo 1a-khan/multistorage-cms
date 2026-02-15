@@ -22,7 +22,8 @@
           <span class="badge text-bg-warning text-dark">PENDING</span>
         {% endif %}
       </p>
-      <p class="mb-0"><strong>Storage key:</strong><br><code>{{ document.current_version.storage_key }}</code></p>
+      <p class="mb-0"><strong>Stored location (URI/path):</strong><br><code>{{ document.current_version.storage_key }}</code></p>
+      <p class="mt-2 mb-0 text-muted small">This is backend storage location metadata, not a public download URL.</p>
       {% if document.current_version.uploaded_at %}
         <p class="mt-2 mb-0"><strong>Uploaded at:</strong> {{ document.current_version.uploaded_at }}</p>
       {% endif %}

@@ -26,3 +26,9 @@ class DocumentUploadForm(forms.ModelForm):
                 'No active storage backends are configured for this hub yet. '
                 'Create one in Django Admin.'
             )
+
+
+class DocumentEditForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['title', 'description', 'visibility']

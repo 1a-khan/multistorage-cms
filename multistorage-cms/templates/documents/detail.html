@@ -6,7 +6,21 @@
     <h1 class="h3 m-0">{{ document.title }}</h1>
     <p class="text-muted mb-0">Hub: <a href="{% url 'project_hubs:detail' hub.slug %}">{{ hub.name }}</a></p>
   </div>
-  <a class="btn btn-outline-primary" href="{% url 'documents:list' hub.slug %}">Back to List</a>
+  <div class="d-flex gap-2">
+    {% if can_open_file %}
+      <a class="btn btn-primary" href="{% url 'documents:open' hub.slug document.pk %}" target="_blank" rel="noreferrer">Open File</a>
+    {% else %}
+      <button class="btn btn-primary" type="button" disabled>Open File</button>
+    {% endif %}
+    <a class="btn btn-outline-dark" href="{% url 'documents:file_info' hub.slug document.pk %}" target="_blank" rel="noreferrer">File API</a>
+    {% if can_manage_document %}
+      <a class="btn btn-outline-secondary" href="{% url 'documents:edit' hub.slug document.pk %}">Edit</a>
+    {% endif %}
+    {% if can_delete_document %}
+      <a class="btn btn-outline-danger" href="{% url 'documents:delete' hub.slug document.pk %}">Delete</a>
+    {% endif %}
+    <a class="btn btn-outline-primary" href="{% url 'documents:list' hub.slug %}">Back to List</a>
+  </div>
 </div>
 
 <div class="row g-3">
