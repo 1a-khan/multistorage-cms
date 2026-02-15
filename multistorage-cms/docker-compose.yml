@@ -20,8 +20,10 @@ services:
     working_dir: /app
     volumes:
       - ./:/app
+      - ../service-account-gdrive.json:/run/secrets/gdrive-service-account.json:ro
     env_file:
       - .env.example
+      - ../.env
     command: bash -lc "pip install -r requirements.txt && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
@@ -34,8 +36,10 @@ services:
     working_dir: /app
     volumes:
       - ./:/app
+      - ../service-account-gdrive.json:/run/secrets/gdrive-service-account.json:ro
     env_file:
       - .env.example
+      - ../.env
     command: bash -lc "pip install -r requirements.txt && celery -A core worker -l info"
     depends_on:
       - redis
@@ -48,6 +52,7 @@ services:
       - ./:/app
     env_file:
       - .env.example
+      - ../.env
     command: bash -lc "pip install -r requirements.txt && celery -A core flower --port=5555"
     ports:
       - "5555:5555"

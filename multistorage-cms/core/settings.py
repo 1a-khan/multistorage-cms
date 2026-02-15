@@ -57,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+if ENABLE_ALLAUTH:
+    MIDDLEWARE.append('allauth.account.middleware.AccountMiddleware')
 
 ROOT_URLCONF = 'core.urls'
 
@@ -152,10 +154,10 @@ AUTHENTICATION_BACKENDS = [
 if ENABLE_ALLAUTH:
     AUTHENTICATION_BACKENDS.append('allauth.account.auth_backends.AuthenticationBackend')
 
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = os.getenv('ACCOUNT_EMAIL_VERIFICATION', 'none')
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {

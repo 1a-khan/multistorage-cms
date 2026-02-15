@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
+  <bpmn:process id="Process_tst_msg_queue_bmx6wz3" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_17db3yp</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_17db3yp" sourceRef="StartEvent_1" targetRef="Activity_1ocex8w" />
+    <bpmn:scriptTask id="Activity_1ocex8w">
+      <bpmn:incoming>Flow_17db3yp</bpmn:incoming>
+      <bpmn:outgoing>Flow_00vxs2x</bpmn:outgoing>
+      <bpmn:ioSpecification>
+        <bpmn:inputSet />
+        <bpmn:outputSet />
+      </bpmn:ioSpecification>
+      <bpmn:script>my_payload = {
+    "a": "Ammad",
+    "b": "IT"
+}</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_00vxs2x" sourceRef="Activity_1ocex8w" targetRef="Event_0urvw39" />
+    <bpmn:intermediateThrowEvent id="Event_0urvw39">
+      <bpmn:incoming>Flow_00vxs2x</bpmn:incoming>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_0gwgpyu" name="my_link" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:intermediateCatchEvent id="Event_0i9qez4">
+      <bpmn:outgoing>Flow_0e7xn3z</bpmn:outgoing>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_079drj6" name="my_link" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0e7xn3z" sourceRef="Event_0i9qez4" targetRef="Activity_1eqa0r3" />
+    <bpmn:manualTask id="Activity_1eqa0r3">
+      <bpmn:incoming>Flow_0e7xn3z</bpmn:incoming>
+      <bpmn:outgoing>Flow_0yaqdi6</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:endEvent id="Event_19xaf9u">
+      <bpmn:incoming>Flow_0yaqdi6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0yaqdi6" sourceRef="Activity_1eqa0r3" targetRef="Event_19xaf9u" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_tst_msg_queue_bmx6wz3">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="-318" y="2" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1y4vx4p_di" bpmnElement="Activity_1ocex8w">
+        <dc:Bounds x="-220" y="-20" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0l0jtp0_di" bpmnElement="Event_0urvw39">
+        <dc:Bounds x="-68" y="2" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xrhtr6_di" bpmnElement="Event_0i9qez4">
+        <dc:Bounds x="-328" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0p571hm_di" bpmnElement="Activity_1eqa0r3">
+        <dc:Bounds x="-240" y="130" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19xaf9u_di" bpmnElement="Event_19xaf9u">
+        <dc:Bounds x="-88" y="152" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_17db3yp_di" bpmnElement="Flow_17db3yp">
+        <di:waypoint x="-282" y="20" />
+        <di:waypoint x="-220" y="20" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00vxs2x_di" bpmnElement="Flow_00vxs2x">
+        <di:waypoint x="-120" y="20" />
+        <di:waypoint x="-68" y="20" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0e7xn3z_di" bpmnElement="Flow_0e7xn3z">
+        <di:waypoint x="-292" y="170" />
+        <di:waypoint x="-240" y="170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yaqdi6_di" bpmnElement="Flow_0yaqdi6">
+        <di:waypoint x="-140" y="170" />
+        <di:waypoint x="-88" y="170" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

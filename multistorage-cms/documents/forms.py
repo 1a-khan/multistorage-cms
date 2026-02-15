@@ -16,7 +16,13 @@ class DocumentUploadForm(forms.ModelForm):
 
     def __init__(self, *args, project_hub=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['storage_backend'].queryset = StorageBackend.objects.filter(
+        queryset = StorageBackend.objects.filter(
             Q(project_hub=project_hub) | Q(project_hub__isnull=True),
             status=StorageBackend.Status.ACTIVE,
         ).order_by('name')
+        self.fields['storage_backend'].queryset = queryset
+        if not queryset.exists():
+            self.fields['storage_backend'].help_text = (
+                'No active storage backends are configured for this hub yet. '
+                'Create one in Django Admin.'
+            )

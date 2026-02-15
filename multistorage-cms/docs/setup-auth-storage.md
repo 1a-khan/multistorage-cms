@@ -73,14 +73,14 @@ Then login page will show `Continue with Google`.
 Create a `StorageBackend` row in Django admin (`/admin`) with:
 - `kind = S3`
 - `status = ACTIVE`
-- `config_encrypted` JSON like:
+- `config_encrypted` JSON like (env-ref style, recommended):
 
 ```json
 {
   "bucket": "your-bucket-name",
   "region": "us-east-1",
-  "access_key": "AKIA...",
-  "secret_key": "...",
+  "access_key_env": "AWS_ACCESS_KEY_ID",
+  "secret_key_env": "AWS_SECRET_ACCESS_KEY",
   "endpoint_url": "https://s3.amazonaws.com",
   "object_prefix": "multistorage"
 }
@@ -89,6 +89,12 @@ Create a `StorageBackend` row in Django admin (`/admin`) with:
 Notes:
 - For MinIO or S3-compatible services, set `endpoint_url` accordingly.
 - Return path format is `s3://bucket/key`.
+- Add real secret values in `.env`, not in JSON:
+
+```bash
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+```
 
 ## 6) Google Drive backend configuration
 
@@ -105,12 +111,12 @@ Use a service account (recommended for server-to-server uploads).
 Create backend with:
 - `kind = GDRIVE`
 - `status = ACTIVE`
-- `config_encrypted` JSON example:
+- `config_encrypted` JSON example (env-ref style, recommended):
 
 ```json
 {
-  "folder_id": "1AbCdEfGhIjKlMnOp",
-  "service_account_file": "/absolute/path/to/service-account.json"
+  "folder_id_env": "GDRIVE_FOLDER_ID",
+  "service_account_file_env": "GDRIVE_SERVICE_ACCOUNT_FILE"
 }
 ```
 
@@ -118,12 +124,24 @@ Alternative:
 
 ```json
 {
-  "folder_id": "1AbCdEfGhIjKlMnOp",
-  "service_account_json": {"type": "service_account", "project_id": "..."}
+  "folder_id_env": "GDRIVE_FOLDER_ID",
+  "service_account_json_env": "GDRIVE_SERVICE_ACCOUNT_JSON"
 }
 ```
 
 Return path format is `gdrive://file_id:file_name`.
+
+Then set `.env`:
+
+```bash
+GDRIVE_FOLDER_ID=1AbCdEfGhIjKlMnOp
+GDRIVE_SERVICE_ACCOUNT_FILE=/run/secrets/gdrive-service-account.json
+# or
+GDRIVE_SERVICE_ACCOUNT_JSON={...json...}
+```
+
+For Docker Compose in this repo, the host file `../service-account-gdrive.json` is mounted read-only
+to `/run/secrets/gdrive-service-account.json` in `web` and `worker`.
 
 ## 7) Celery worker + Flower
 

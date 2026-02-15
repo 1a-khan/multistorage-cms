@@ -35,6 +35,7 @@ def upload_document_version_task(self, version_id: int, source_path: str) -> Non
     if not source.exists():
         raise FileNotFoundError(f'Source upload file missing: {source_path}')
 
+    upload_succeeded = False
     try:
         provider = get_provider(version.storage_backend)
         stored_key = provider.upload(source, version.storage_key)
@@ -46,6 +47,7 @@ def upload_document_version_task(self, version_id: int, source_path: str) -> Non
             fresh.uploaded_at = timezone.now()
             fresh.error_message = ''
             fresh.save(update_fields=['storage_key', 'upload_state', 'uploaded_at', 'error_message'])
+            upload_succeeded = True
     except Exception as exc:
         with transaction.atomic():
             failed = DocumentVersion.objects.select_for_update().get(id=version_id)
@@ -54,5 +56,5 @@ def upload_document_version_task(self, version_id: int, source_path: str) -> Non
             failed.save(update_fields=['upload_state', 'error_message'])
         raise
     finally:
-        if source.exists():
+        if upload_succeeded and source.exists():
             source.unlink(missing_ok=True)

@@ -27,12 +27,12 @@
           </ul>
         </div>
         <span class="small">{{ user.email }}</span>
-        <form action="{% url 'logout' %}" method="post" class="m-0">
+        <form action="{% if enable_allauth %}{% url 'account_logout' %}{% else %}{% url 'logout' %}{% endif %}" method="post" class="m-0">
           {% csrf_token %}
           <button class="btn btn-sm btn-outline-light" type="submit">Logout</button>
         </form>
       {% else %}
-        <a href="{% url 'login' %}" class="btn btn-sm btn-light">Login</a>
+        <a href="{% if enable_allauth %}{% url 'account_login' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-sm btn-light">Login</a>
       {% endif %}
     </div>
   </div>

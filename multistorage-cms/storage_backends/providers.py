@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +17,15 @@ class StorageProvider:
 
     def upload(self, local_path: Path, storage_key: str) -> str:
         raise NotImplementedError
+
+    def _resolve_config_value(self, direct_key: str, env_key_name_key: str) -> Any:
+        direct = self.config.get(direct_key)
+        if direct not in (None, ''):
+            return direct
+        env_name = self.config.get(env_key_name_key)
+        if env_name:
+            return os.getenv(env_name, '')
+        return None
 
 
 class LocalStorageProvider(StorageProvider):
@@ -41,8 +51,8 @@ class S3StorageProvider(StorageProvider):
         bucket = self.config.get('bucket')
         region = self.config.get('region')
         endpoint_url = self.config.get('endpoint_url')
-        access_key = self.config.get('access_key')
-        secret_key = self.config.get('secret_key')
+        access_key = self._resolve_config_value('access_key', 'access_key_env')
+        secret_key = self._resolve_config_value('secret_key', 'secret_key_env')
         object_prefix = self.config.get('object_prefix', '').strip('/')
 
         if not bucket:
@@ -76,9 +86,9 @@ class GoogleDriveStorageProvider(StorageProvider):
                 'google-api-python-client and google-auth are required for Google Drive uploads.'
             ) from exc
 
-        folder_id = self.config.get('folder_id')
-        service_account_json = self.config.get('service_account_json')
-        service_account_file = self.config.get('service_account_file')
+        folder_id = self._resolve_config_value('folder_id', 'folder_id_env')
+        service_account_json = self._resolve_config_value('service_account_json', 'service_account_json_env')
+        service_account_file = self._resolve_config_value('service_account_file', 'service_account_file_env')
         if not folder_id:
             raise ValueError('Google Drive backend requires `folder_id` in config_encrypted.')
         if not service_account_json and not service_account_file:

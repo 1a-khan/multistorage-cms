@@ -8,6 +8,12 @@
     <form method="post" enctype="multipart/form-data" class="card card-body">
       {% csrf_token %}
       {{ form.as_p }}
+      {% if not form.fields.storage_backend.queryset %}
+        <div class="alert alert-warning">
+          No active storage backend found. Add one in
+          <a href="/admin/storage_backends/storagebackend/" target="_blank" rel="noreferrer">Admin</a>.
+        </div>
+      {% endif %}
       <div class="d-flex gap-2">
         <button class="btn btn-primary" type="submit">Start Upload</button>
         <a class="btn btn-outline-secondary" href="{% url 'documents:list' hub.slug %}">Cancel</a>

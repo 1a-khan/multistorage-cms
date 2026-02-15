@@ -83,4 +83,5 @@ class UploadDocumentVersionTaskTests(TestCase):
         version.refresh_from_db()
         self.assertEqual(version.upload_state, DocumentVersion.UploadState.FAILED)
         self.assertIn('upload exploded', version.error_message)
-        self.assertFalse(source.exists())
+        self.assertTrue(source.exists())
+        source.unlink(missing_ok=True)
